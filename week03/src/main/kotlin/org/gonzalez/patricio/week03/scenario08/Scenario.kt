@@ -1,5 +1,6 @@
-package week03.org.gonzalez.patricio.week03.scenario07
+package week03.org.gonzalez.patricio.week03.scenario08
 
+import kotlin.reflect.KClass
 
 
 open class Tool {
@@ -27,37 +28,38 @@ open class Toolbox {
     var tools = emptyList<Tool>()
         private set
 
-    fun add(tool: Tool) { // A
-        println("      Toolbox.add(tool)")
-        tools = tools + tool
+    var adders: MutableMap<KClass<*>, (Tool, List<Tool>) -> List<Tool>> = mutableMapOf()
+        private set
+
+    fun registerAdder(toolType: KClass<*>, adder: (Tool, List<Tool>) -> List<Tool>) {
+        adders[toolType] = adder
     }
 
-    fun add(tool: Screwdriver) {  // B
-        println("      Toolbox.add(screwdriver)")
-        tools = tools + tool
+    fun add(tool: Tool) {
+        tools = adders[tool::class]?.invoke(tool, tools) ?: tools
     }
 
-    open fun add(tool: Saw) {  // C
-        println("      Toolbox.add(saw)")
-        tools = tools + tool
-    }
 }
 
-class SafeToolbox: Toolbox() {
-    override fun add(tool: Saw) {   // D
-        println("      SafeToolbox.add(Saw) -- adding safely!!!")
-        super.add(tool)
-    }
-}
 
 fun main() {
-    val safeToolbox: SafeToolbox = SafeToolbox()
-    println("Adding tools")
+    val toolbox: Toolbox = Toolbox()
+    toolbox.registerAdder(Saw::class) {
+        tool, tools ->
+        println("Calling Saw adder")
+        tools + tool
+    }
 
-    safeToolbox.add(Saw()) // what will be called - add(tool) where is? // NOW IS D
-    safeToolbox.add(Screwdriver())
+    toolbox.registerAdder(Screwdriver::class) {
+            tool, tools ->
+        println("Calling Screwdriver adder")
+        tools + tool
+    }
 
-    println(safeToolbox.tools)
+    println("adding tools")
 
+    toolbox.add(Saw())
+    toolbox.add(Screwdriver())
+    println(toolbox.tools)
 
 }

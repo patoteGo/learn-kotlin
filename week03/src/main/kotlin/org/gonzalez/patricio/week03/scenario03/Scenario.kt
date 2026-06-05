@@ -1,4 +1,4 @@
-package week03.org.gonzalez.patricio.week03.scenario02
+package week03.org.gonzalez.patricio.week03.scenario03
 
 
 open class Tool {
@@ -39,24 +39,15 @@ class Toolbox {
 
 fun main() {
     val toolbox = Toolbox()
-    val saw: Tool = Saw()
-    val saw2: Saw = Saw()
-    val screwdriver: Tool = Screwdriver()
-    val screwdriver2: Screwdriver = Screwdriver()
+    val tools = listOf(Saw(), Screwdriver())
+    println("Adding tools")
 
-    println("adding saw")
-    toolbox.add(saw)
-    println("adding screwdriver")
-    toolbox.add(screwdriver)
-
-    println("adding saw2")
-    toolbox.add(saw2)
-    println("adding screwdriver2")
-    toolbox.add(screwdriver2)
+    for (tool in tools) {
+        toolbox.add(tool) // what is called here?
+            // compile time signature is Toolbox.add(tool)
+    }
 
     println(toolbox.tools)
 
-    // NOTE - calls toString() on each tool
-    // toString() is intended for DEBUGGING, not to be user facing!
-    // would give you one true way to display the data
+
 }

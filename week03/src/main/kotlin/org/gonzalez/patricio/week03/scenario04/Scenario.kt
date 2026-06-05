@@ -1,4 +1,4 @@
-package week03.org.gonzalez.patricio.week03.scenario03
+package week03.org.gonzalez.patricio.week03.scenario04
 
 
 open class Tool {
@@ -22,8 +22,9 @@ class Saw: Tool() {
     }
 }
 
-class Toolbox {
+open class Toolbox {
     var tools = emptyList<Tool>()
+//        protected set   // this way can modify only on classes
         private set
 
     fun add(tool: Tool) { // A
@@ -37,17 +38,22 @@ class Toolbox {
     }
 }
 
+class SafeToolbox: Toolbox() {
+    fun add(tool: Saw) {   // C
+        println("      SafeToolbox.add(Saw) - adding safely!!!")
+//        tools = tools + tool
+        super.add(tool)
+    }
+}
+
 fun main() {
-    val toolbox = Toolbox()
+    val safeToolbox = Toolbox()
     val tools = listOf(Saw(), Screwdriver())
     println("Adding tools")
 
-    for (tool in tools) {
-        toolbox.add(tool) // what is called here?
-            // compile time signature is Toolbox.add(tool)
-    }
-
-    println(toolbox.tools)
+    safeToolbox.add(Saw()) // what will be called - add(tool)
+    safeToolbox.add(Screwdriver())
+    println(safeToolbox.tools)
 
 
 }

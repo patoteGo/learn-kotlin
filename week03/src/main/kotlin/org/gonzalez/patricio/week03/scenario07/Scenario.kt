@@ -1,4 +1,4 @@
-package week03.org.gonzalez.patricio.week03.scenario06
+package week03.org.gonzalez.patricio.week03.scenario07
 
 
 
@@ -36,10 +36,15 @@ open class Toolbox {
         println("      Toolbox.add(screwdriver)")
         tools = tools + tool
     }
+
+    open fun add(tool: Saw) {  // C
+        println("      Toolbox.add(saw)")
+        tools = tools + tool
+    }
 }
 
 class SafeToolbox: Toolbox() {
-    fun add(tool: Saw) {   // C
+    override fun add(tool: Saw) {   // D
         println("      SafeToolbox.add(Saw) -- adding safely!!!")
         super.add(tool)
     }
@@ -49,7 +54,7 @@ fun main() {
     val safeToolbox: SafeToolbox = SafeToolbox()
     println("Adding tools")
 
-    safeToolbox.add(Saw()) // what will be called - add(tool) where is? // NOW IS C
+    safeToolbox.add(Saw()) // what will be called - add(tool) where is? // NOW IS D
     safeToolbox.add(Screwdriver())
 
     println(safeToolbox.tools)

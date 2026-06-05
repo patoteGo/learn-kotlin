@@ -1,9 +1,10 @@
-package week03.org.gonzalez.patricio.week03.scenario05
+package week03.org.gonzalez.patricio.week03.scenario06
+
 
 
 open class Tool {
 
-//    var name: String = ""
+    //    var name: String = ""
 //    override fun toString(): String {
 //        return "Tool()"
 //    }
@@ -22,7 +23,7 @@ class Saw: Tool() {
     }
 }
 
-class Toolbox {
+open class Toolbox {
     var tools = emptyList<Tool>()
         private set
 
@@ -37,22 +38,21 @@ class Toolbox {
     }
 }
 
+class SafeToolbox: Toolbox() {
+    fun add(tool: Saw) {   // C
+        println("      SafeToolbox.add(Saw) -- adding safely!!!")
+        super.add(tool)
+    }
+}
+
 fun main() {
-    val toolbox = Toolbox()
-    val tools = listOf(Saw(), Screwdriver())
+    val safeToolbox: SafeToolbox = SafeToolbox()
     println("Adding tools")
 
-    for (tool in tools) {
-        when(tool) {
-            is Saw -> toolbox.add(tool)   // SMARTcasting
-            is Screwdriver -> toolbox.add(tool)  // SMARTcasting
-            else -> toolbox.add(tool)  // SMARTcasting
-        }
-        toolbox.add(tool) // what is called here?
-            // compile time signature is Toolbox.add(tool)
-    }
+    safeToolbox.add(Saw()) // what will be called - add(tool) where is? // NOW IS C
+    safeToolbox.add(Screwdriver())
 
-    println(toolbox.tools)
+    println(safeToolbox.tools)
 
 
 }
