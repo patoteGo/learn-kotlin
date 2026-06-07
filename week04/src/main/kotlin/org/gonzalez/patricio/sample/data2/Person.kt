@@ -1,4 +1,3 @@
 package org.gonzalez.patricio.sample.data2
 
-class Person {
-}
+data class Person (var name: String)

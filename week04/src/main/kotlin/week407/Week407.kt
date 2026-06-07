@@ -1,24 +1,38 @@
-package week406
+package week407
 
-// more expressions
+// TYPES
 
-data class Person(val name: String)
-
-
-class Stuff {
-    private var person: Person? = Person("")
-
-    fun foo() {
-        if( person != null ) {
-            println(person!!.name)  // trusted but verified at runtime
-            // ALMOST NEVER USE THIS!!! Use ?. instead
-        }
-
-        // This is better alternative to !!, you can add a error message
-        println(requireNotNull(person).name)
-        println(requireNotNull(person, {"oops - person not set"}).name)
-    }
+abstract class Mammal
+class Dog(name: String): Mammal() {
+    fun bark() { println("Woof") }
+}
+class Cat(name: String): Mammal() {
+    fun annoy() { println("trip to the overlord!!")}
 }
 
+fun mammalStuff(mammal: Mammal) { // parameter - it's a val
+    if (mammal is Cat) {  // similar to instanceof in Java
+        mammal.annoy()  // smart cast to Cat
+    } else if (mammal is Dog) {
+        mammal.bark()  // smart cast to Dog
+    }
 
+    if (mammal !is Cat) {
+        println("it's not a Cat")
+    }
 
+    if (mammal !is Dog) {
+        println("it's not a Dog")
+    }
+
+    //    mammal as Cat // might not work - blows up if it's not a Cat
+
+    (mammal as? Cat)?.annoy() // if a Cat, it's a non-null Cat, otherwise null
+    (mammal as? Dog)?.bark() // if is a Dog, the same as previous
+
+    when (mammal) {
+        is Cat -> mammal.annoy()
+        is Dog -> mammal.bark()
+        else -> {}
+    }
+}

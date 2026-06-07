@@ -17,7 +17,7 @@ open class BinaryTree1 {
         // inner classes have a implicit pointer to the containing instance
         fun inorder() {  // TEMPLATE METHOD - algorithm with replaceable steps
             left?.inorder()
-            processValue(value) // REPLACEABLE STEPS = "hooks"
+            processValue(value) // REPLACEABLE STEPS = "hooks" process
             right?.inorder()
 
         }
@@ -32,17 +32,60 @@ open class BinaryTree1 {
 
 
     }
+    fun insert(value: Int) {
+        root?.insert(Node(value)) ?: run { root = Node(value) }
+    }
 
     fun inorder() {
         root?.inorder()
     }
 
-    fun insert(value: Int) {
-        root?.insert(Node(value)) ?: { root = Node(value) }
-    }
+
 }
 
-data class Person(var name: String, var father: Person? = null)
+
+open class BinaryTree3 {
+    //    var printValue: (Int) -> Unit = { println(it)}
+    open fun processValue(value: Int) { // member function of BinaryTree3
+        println(value)
+    }
+
+    private var root: Node? = null
+
+    private inner class Node(
+        val value: Int,
+        var left: Node? = null,
+        var right: Node? = null,
+    ) {
+        // inner classes have a implicit pointer to the containing instance
+        fun inorder(processValue: (Int) -> Unit = { println(it)}) {  // TEMPLATE METHOD - algorithm with replaceable steps
+            left?.inorder(processValue)
+            processValue(value) // REPLACEABLE STEPS = "hooks" parameters
+            right?.inorder(processValue)
+
+        }
+
+        fun insert(node: Node) {
+            if(node.value < value ) {
+                left?.insert(node) ?: run { left = node}
+            } else {
+                right?.insert(Node(value)) ?: run { right = node}
+            }
+        }
+
+
+    }
+    fun insert(value: Int) {
+        root?.insert(Node(value)) ?: run { root = Node(value) }
+    }
+
+    fun inorder(processValue: (Int) -> Unit = { println(it)}) {
+        root?.inorder(processValue)
+    }
+
+
+}
+
 
 // NOT IDEAL -- need a whole new copy of the data structure to do different action
 class BinaryTree1a: BinaryTree1() {
@@ -53,7 +96,7 @@ class BinaryTree1a: BinaryTree1() {
 }
 
 fun main() {
-    var tree1 = BinaryTree1()
+    var tree1 = BinaryTree2()
     tree1.insert(42)
     tree1.insert(100)
     tree1.insert(10)
@@ -61,13 +104,11 @@ fun main() {
     tree1.insert(4)
     tree1.insert(12)
 
-    var tree1a = BinaryTree1a()
-    tree1a.insert(42)
-    tree1a.insert(100)
-    tree1a.insert(10)
-    tree1a.insert(60)
-    tree1a.insert(4)
-    tree1a.insert(12)
+    tree1.inorder()
+
+//    var tree3 = BinaryTree3()
+//    insertValues(tree3)
+//    tree3.inorder({println("Y${it}Y")})
 
 }
 
